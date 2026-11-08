@@ -1,0 +1,1377 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8eff7">
+<title>MyDiary - Your Personal Journal</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+    --bg: #faf5fa;
+    --card: #ffffff;
+    --text: #443747;
+    --muted: #97899a;
+    --primary: #b17bb9;
+    --primary-light: #f1e3f3;
+    --border: #eee3ee;
+    --shadow: 0 8px 30px rgba(100,65,100,.07);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    transition: .3s;
+}
+
+body.dark {
+    --bg: #191521;
+    --card: #262030;
+    --text: #f4eaf5;
+    --muted: #b0a3b6;
+    --primary: #d09ad8;
+    --primary-light: #403149;
+    --border: #40364a;
+    --shadow: 0 8px 30px rgba(0,0,0,.15);
+}
+
+button, input, textarea, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+header {
+    height: 76px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 27px;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.logo span {
+    color: var(--text);
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    padding: 10px 13px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.icon-btn:hover {
+    background: var(--primary-light);
+}
+
+.container {
+    max-width: 1050px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.welcome {
+    background: linear-gradient(120deg,#e8cbe9,#f5dfe9,#f7e8db);
+    border-radius: 22px;
+    padding: 32px;
+    color: #624a65;
+    margin-bottom: 25px;
+}
+
+.welcome h1 {
+    font-family: 'Playfair Display',serif;
+    font-size: 34px;
+    margin-bottom: 9px;
+}
+
+.welcome p {
+    color: #765e77;
+}
+
+.date-label {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #765e77;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.stat .number {
+    font-size: 27px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.section-title {
+    font-family: 'Playfair Display',serif;
+    font-size: 23px;
+    margin-bottom: 16px;
+}
+
+.card {
+    background: var(--card);
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--muted);
+}
+
+input, textarea, select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 13px;
+    border-radius: 10px;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary);
+}
+
+textarea {
+    min-height: 180px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+.primary-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 22px;
+    font-weight: 700;
+}
+
+.primary-btn:hover {
+    opacity: .88;
+}
+
+.secondary-btn {
+    background: var(--primary-light);
+    color: var(--text);
+    border: none;
+    padding: 11px 16px;
+    border-radius: 9px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-row input {
+    margin: 0;
+    flex: 1;
+}
+
+.search-row select {
+    width: auto;
+    margin: 0;
+}
+
+.entry {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 21px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow);
+}
+
+.entry-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.entry h3 {
+    font-family: 'Playfair Display',serif;
+    font-size: 20px;
+    margin-bottom: 7px;
+    overflow-wrap: anywhere;
+}
+
+.entry-date {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.mood {
+    font-size: 24px;
+}
+
+.entry-content {
+    margin-top: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.entry-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 17px;
+    flex-wrap: wrap;
+}
+
+.small-btn {
+    background: var(--primary-light);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.delete-btn {
+    background: #fae2e5;
+    color: #a53e55;
+}
+
+.empty {
+    text-align: center;
+    padding: 45px 15px;
+    color: var(--muted);
+}
+
+.empty div {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* PIN LOCK */
+
+.lock-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(140deg,#f5e6f4,#f9eff0,#f8e9dc);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.lock-card {
+    background: white;
+    color: #493c4c;
+    width: 100%;
+    max-width: 390px;
+    padding: 35px;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 15px 60px #80608025;
+}
+
+.lock-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.lock-card h2 {
+    font-family: 'Playfair Display',serif;
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.lock-card p {
+    color: #99889b;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.lock-card input {
+    background: #faf5fa;
+    color: #493c4c;
+    text-align: center;
+    font-size: 21px;
+    letter-spacing: 6px;
+}
+
+.lock-card button {
+    width: 100%;
+}
+
+.lock-error {
+    color: #c34b65;
+    font-size: 12px;
+    margin-bottom: 12px;
+    min-height: 16px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media(max-width:650px) {
+    header {
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    .container {
+        margin-top: 20px;
+        padding: 0 13px;
+    }
+
+    .welcome {
+        padding: 24px;
+    }
+
+    .welcome h1 {
+        font-size: 27px;
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .stat {
+        padding: 13px;
+    }
+
+    .stat .number {
+        font-size: 22px;
+    }
+
+    .stat p {
+        font-size: 11px;
+    }
+
+    .card {
+        padding: 17px;
+    }
+
+    .search-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-row select {
+        width: 100%;
+    }
+
+    .header-actions {
+        gap: 5px;
+    }
+
+    .icon-btn {
+        padding: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PIN LOCK SCREEN -->
+
+<div class="lock-screen" id="lockScreen">
+    <div class="lock-card">
+
+        <div class="lock-icon">🔐</div>
+        <h2 id="lockTitle">Welcome to MyDiary</h2>
+
+        <p id="lockDescription">
+            Create a private PIN to protect your personal memories.
+        </p>
+
+        <form id="pinForm">
+            <input
+                type="password"
+                id="pinInput"
+                placeholder="Enter 6-digit PIN"
+                inputmode="numeric"
+                maxlength="12"
+                minlength="6"
+                autocomplete="off"
+                required
+            >
+
+            <input
+                type="password"
+                id="confirmPin"
+                placeholder="Confirm your PIN"
+                inputmode="numeric"
+                maxlength="12"
+                minlength="6"
+                autocomplete="off"
+                required
+                class="hidden"
+            >
+
+            <div class="lock-error" id="lockError"></div>
+
+            <button class="primary-btn" id="pinButton" type="submit">
+                Create Secure Diary
+            </button>
+        </form>
+
+        <p style="margin-top:18px;font-size:11px">
+            🔒 Your diary is encrypted in this browser.
+            Your PIN cannot be recovered if forgotten.
+        </p>
+
+    </div>
+</div>
+
+<!-- MAIN APP -->
+
+<div id="app" class="hidden">
+
+<header>
+    <div class="logo">♡ <span>MyDiary</span></div>
+
+    <div class="header-actions">
+        <button class="icon-btn" onclick="toggleTheme()" title="Theme">🌙</button>
+        <button class="icon-btn" onclick="changePin()" title="Change PIN">🔑</button>
+        <button class="icon-btn" onclick="lockDiary()" title="Lock">🔒</button>
+    </div>
+</header>
+
+<div class="container">
+
+    <section class="welcome">
+        <h1>Your little world, your memories. ♡</h1>
+        <p>Every day is a new page. Write your story.</p>
+        <div class="date-label" id="todayDate"></div>
+    </section>
+
+    <section class="stats">
+
+        <div class="stat">
+            <div class="number" id="totalEntries">0</div>
+            <p>📖 Total Entries</p>
+        </div>
+
+        <div class="stat">
+            <div class="number" id="favoriteCount">0</div>
+            <p>❤️ Favourite Memories</p>
+        </div>
+
+        <div class="stat">
+            <div class="number" id="daysCount">0</div>
+            <p>🌸 Days Written</p>
+        </div>
+
+    </section>
+
+    <!-- WRITE DIARY -->
+
+    <section>
+        <h2 class="section-title" id="formTitle">✍️ Write Your Story</h2>
+
+        <div class="card">
+
+            <form id="entryForm">
+
+                <label>Diary Title</label>
+                <input
+                    type="text"
+                    id="entryTitle"
+                    placeholder="Give your day a title..."
+                    maxlength="100"
+                    required
+                >
+
+                <label>How are you feeling today?</label>
+
+                <select id="entryMood">
+                    <option value="😊">😊 Happy</option>
+                    <option value="🥰">🥰 Loved</option>
+                    <option value="😌">😌 Peaceful</option>
+                    <option value="😢">😢 Sad</option>
+                    <option value="😔">😔 Tired</option>
+                    <option value="😡">😡 Angry</option>
+                    <option value="🤩">🤩 Excited</option>
+                    <option value="😎">😎 Confident</option>
+                    <option value="🥺">🥺 Emotional</option>
+                    <option value="🌈">🌈 Hopeful</option>
+                </select>
+
+                <label>Write your thoughts</label>
+
+                <textarea
+                    id="entryContent"
+                    placeholder="Dear Diary...
+
+Today was a beautiful day because..."
+                    maxlength="20000"
+                    required
+                ></textarea>
+
+                <div class="form-actions">
+
+                    <button type="submit" class="primary-btn" id="saveBtn">
+                        💗 Save Diary
+                    </button>
+
+                    <button
+                        type="button"
+                        class="secondary-btn hidden"
+                        id="cancelEdit"
+                        onclick="cancelEditing()"
+                    >
+                        Cancel Edit
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+    <!-- DIARY ENTRIES -->
+
+    <section>
+
+        <h2 class="section-title">📚 My Memories</h2>
+
+        <div class="search-row">
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="🔍 Search your diary..."
+            >
+
+            <select id="filterSelect">
+                <option value="all">All Entries</option>
+                <option value="favorites">❤️ Favourites</option>
+                <option value="recent">Newest First</option>
+                <option value="oldest">Oldest First</option>
+            </select>
+
+        </div>
+
+        <div id="entriesList"></div>
+
+    </section>
+
+</div>
+
+<footer>
+    MyDiary © 2026
+    <br><br>
+    Your memories deserve a beautiful place. ♡
+</footer>
+
+</div>
+
+<script>
+
+/* =========================
+   SECURE ENCRYPTED STORAGE
+========================= */
+
+const STORAGE_KEY = "mydiary_secure_v1";
+
+let vault = null;
+let encryptionKey = null;
+let entries = [];
+let editingId = null;
+let isSetup = false;
+
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
+
+function randomBytes(length) {
+    const bytes = new Uint8Array(length);
+    crypto.getRandomValues(bytes);
+    return bytes;
+}
+
+function toBase64(bytes) {
+    let binary = "";
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary);
+}
+
+function fromBase64(value) {
+    const binary = atob(value);
+    return Uint8Array.from(binary, c => c.charCodeAt(0));
+}
+
+async function deriveKey(pin, salt) {
+
+    const material = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(pin),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+    );
+
+    return crypto.subtle.deriveKey(
+        {
+            name: "PBKDF2",
+            salt: salt,
+            iterations: 250000,
+            hash: "SHA-256"
+        },
+        material,
+        {
+            name: "AES-GCM",
+            length: 256
+        },
+        false,
+        ["encrypt", "decrypt"]
+    );
+}
+
+async function encryptData(data, key) {
+
+    const iv = randomBytes(12);
+
+    const encrypted = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv: iv },
+        key,
+        encoder.encode(JSON.stringify(data))
+    );
+
+    return {
+        version: 1,
+        iv: toBase64(iv),
+        ciphertext: toBase64(new Uint8Array(encrypted))
+    };
+}
+
+async function decryptData(record, key) {
+
+    const decrypted = await crypto.subtle.decrypt(
+        {
+            name: "AES-GCM",
+            iv: fromBase64(record.iv)
+        },
+        key,
+        fromBase64(record.ciphertext)
+    );
+
+    return JSON.parse(decoder.decode(decrypted));
+}
+
+async function saveData() {
+
+    try {
+
+        const encrypted = await encryptData(
+            { entries: entries },
+            encryptionKey
+        );
+
+        const updatedVault = {
+            ...vault,
+            ...encrypted
+        };
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(updatedVault)
+        );
+
+        vault = updatedVault;
+
+        return true;
+
+    } catch (error) {
+
+        alert("Unable to save your diary. Check browser storage.");
+        return false;
+
+    }
+}
+
+/* =========================
+   PIN SETUP AND UNLOCK
+========================= */
+
+const lockScreen = document.getElementById("lockScreen");
+const pinForm = document.getElementById("pinForm");
+const pinInput = document.getElementById("pinInput");
+const confirmPin = document.getElementById("confirmPin");
+const lockError = document.getElementById("lockError");
+
+function validPin(pin) {
+    return /^\d{6,12}$/.test(pin);
+}
+
+function showLock() {
+
+    document.getElementById("app").classList.add("hidden");
+    lockScreen.classList.remove("hidden");
+
+    pinForm.reset();
+    lockError.textContent = "";
+
+    vault = localStorage.getItem(STORAGE_KEY);
+
+    if (vault) {
+        try {
+            vault = JSON.parse(vault);
+        } catch {
+            lockError.textContent = "Saved diary data is damaged.";
+            return;
+        }
+
+        isSetup = false;
+
+        document.getElementById("lockTitle").textContent =
+            "Welcome Back ♡";
+
+        document.getElementById("lockDescription").textContent =
+            "Enter your PIN to unlock your memories.";
+
+        confirmPin.classList.add("hidden");
+        confirmPin.required = false;
+
+        document.getElementById("pinButton").textContent =
+            "Unlock MyDiary";
+
+        pinInput.placeholder = "Enter your PIN";
+
+    } else {
+
+        isSetup = true;
+
+        document.getElementById("lockTitle").textContent =
+            "Welcome to MyDiary";
+
+        document.getElementById("lockDescription").textContent =
+            "Create a private PIN to protect your personal memories.";
+
+        confirmPin.classList.remove("hidden");
+        confirmPin.required = true;
+
+        document.getElementById("pinButton").textContent =
+            "Create Secure Diary";
+
+        pinInput.placeholder = "Create 6-digit PIN";
+
+    }
+
+    pinInput.focus();
+}
+
+pinForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const pin = pinInput.value;
+    const confirmation = confirmPin.value;
+
+    lockError.textContent = "";
+
+    if (!validPin(pin)) {
+        lockError.textContent =
+            "PIN must contain 6 to 12 digits.";
+        return;
+    }
+
+    if (isSetup && pin !== confirmation) {
+        lockError.textContent = "PINs do not match.";
+        return;
+    }
+
+    const button = document.getElementById("pinButton");
+    button.disabled = true;
+    button.textContent = "Please wait...";
+
+    try {
+
+        if (isSetup) {
+
+            const salt = randomBytes(16);
+
+            encryptionKey = await deriveKey(pin, salt);
+
+            entries = [];
+
+            vault = {
+                version: 1,
+                salt: toBase64(salt)
+            };
+
+            const saved = await saveData();
+
+            if (!saved) {
+                throw new Error("Unable to create your diary.");
+            }
+
+        } else {
+
+            encryptionKey = await deriveKey(
+                pin,
+                fromBase64(vault.salt)
+            );
+
+            const data = await decryptData(vault, encryptionKey);
+
+            if (!Array.isArray(data.entries)) {
+                throw new Error("Invalid diary data.");
+            }
+
+            entries = data.entries;
+        }
+
+        lockScreen.classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+
+        renderEntries();
+
+    } catch (error) {
+
+        encryptionKey = null;
+        entries = [];
+
+        lockError.textContent = isSetup
+            ? "Could not create diary. Please try again."
+            : "Incorrect PIN or damaged diary data.";
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent = isSetup
+            ? "Create Secure Diary"
+            : "Unlock MyDiary";
+
+    }
+
+});
+
+/* =========================
+   LOCK AND CHANGE PIN
+========================= */
+
+function lockDiary() {
+
+    encryptionKey = null;
+    entries = [];
+    editingId = null;
+
+    resetForm();
+    showLock();
+}
+
+async function changePin() {
+
+    if (!encryptionKey) return;
+
+    const newPin = prompt("Enter your new 6 to 12 digit PIN:");
+
+    if (newPin === null) return;
+
+    if (!validPin(newPin)) {
+        alert("PIN must contain 6 to 12 digits.");
+        return;
+    }
+
+    const confirmation = prompt("Confirm your new PIN:");
+
+    if (confirmation !== newPin) {
+        alert("PINs do not match.");
+        return;
+    }
+
+    try {
+
+        const salt = randomBytes(16);
+
+        const newKey = await deriveKey(newPin, salt);
+
+        const encrypted = await encryptData(
+            { entries: entries },
+            newKey
+        );
+
+        const updated = {
+            version: 1,
+            salt: toBase64(salt),
+            ...encrypted
+        };
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(updated)
+        );
+
+        vault = updated;
+        encryptionKey = newKey;
+
+        alert("Your PIN has been changed successfully!");
+
+    } catch (error) {
+
+        alert("Unable to change PIN.");
+
+    }
+}
+
+/* =========================
+   DATE AND TIME
+========================= */
+
+function formatDate(date) {
+
+    return new Date(date).toLocaleString([], {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+}
+
+function today() {
+
+    document.getElementById("todayDate").textContent =
+        new Date().toLocaleDateString("en-IN", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+}
+
+today();
+
+/* =========================
+   ADD AND EDIT ENTRIES
+========================= */
+
+const entryForm = document.getElementById("entryForm");
+
+entryForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const title = document.getElementById("entryTitle").value.trim();
+    const content = document.getElementById("entryContent").value.trim();
+    const mood = document.getElementById("entryMood").value;
+
+    if (!title || !content) return;
+
+    if (editingId) {
+
+        const entry = entries.find(e => e.id === editingId);
+
+        if (!entry) return;
+
+        const old = { ...entry };
+
+        entry.title = title;
+        entry.content = content;
+        entry.mood = mood;
+        entry.updatedAt = new Date().toISOString();
+
+        if (!await saveData()) {
+            Object.assign(entry, old);
+            return;
+        }
+
+    } else {
+
+        const newEntry = {
+            id: crypto.randomUUID(),
+            title: title,
+            content: content,
+            mood: mood,
+            favorite: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: null
+        };
+
+        entries.unshift(newEntry);
+
+        if (!await saveData()) {
+            entries = entries.filter(e => e.id !== newEntry.id);
+            return;
+        }
+
+    }
+
+    resetForm();
+    renderEntries();
+
+});
+
+function resetForm() {
+
+    entryForm.reset();
+
+    editingId = null;
+
+    document.getElementById("formTitle").textContent =
+        "✍️ Write Your Story";
+
+    document.getElementById("saveBtn").textContent =
+        "💗 Save Diary";
+
+    document.getElementById("cancelEdit").classList.add("hidden");
+
+}
+
+function cancelEditing() {
+    resetForm();
+}
+
+function editEntry(id) {
+
+    const entry = entries.find(e => e.id === id);
+
+    if (!entry) return;
+
+    editingId = id;
+
+    document.getElementById("entryTitle").value = entry.title;
+    document.getElementById("entryContent").value = entry.content;
+    document.getElementById("entryMood").value = entry.mood;
+
+    document.getElementById("formTitle").textContent =
+        "✏️ Edit Your Memory";
+
+    document.getElementById("saveBtn").textContent =
+        "Update Diary";
+
+    document.getElementById("cancelEdit").classList.remove("hidden");
+
+    document.getElementById("entryTitle").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+/* =========================
+   DELETE ENTRIES
+========================= */
+
+async function deleteEntry(id) {
+
+    if (!confirm("Are you sure you want to delete this memory?")) {
+        return;
+    }
+
+    const previous = entries;
+
+    entries = entries.filter(e => e.id !== id);
+
+    if (!await saveData()) {
+        entries = previous;
+    }
+
+    renderEntries();
+
+}
+
+/* =========================
+   FAVORITES
+========================= */
+
+async function toggleFavorite(id) {
+
+    const entry = entries.find(e => e.id === id);
+
+    if (!entry) return;
+
+    entry.favorite = !entry.favorite;
+
+    if (!await saveData()) {
+        entry.favorite = !entry.favorite;
+    }
+
+    renderEntries();
+
+}
+
+/* =========================
+   SEARCH AND FILTER
+========================= */
+
+document.getElementById("searchInput").addEventListener(
+    "input", renderEntries
+);
+
+document.getElementById("filterSelect").addEventListener(
+    "change", renderEntries
+);
+
+function renderEntries() {
+
+    const list = document.getElementById("entriesList");
+
+    list.innerHTML = "";
+
+    const search = document.getElementById("searchInput").value
+        .trim().toLowerCase();
+
+    const filter = document.getElementById("filterSelect").value;
+
+    let result = entries.filter(entry => {
+
+        const matches =
+            entry.title.toLowerCase().includes(search) ||
+            entry.content.toLowerCase().includes(search);
+
+        const favorite =
+            filter !== "favorites" || entry.favorite;
+
+        return matches && favorite;
+
+    });
+
+    if (filter === "recent") {
+        result.sort((a,b) =>
+            new Date(b.createdAt) - new Date(a.createdAt)
+        );
+    }
+
+    if (filter === "oldest") {
+        result.sort((a,b) =>
+            new Date(a.createdAt) - new Date(b.createdAt)
+        );
+    }
+
+    document.getElementById("totalEntries").textContent =
+        entries.length;
+
+    document.getElementById("favoriteCount").textContent =
+        entries.filter(e => e.favorite).length;
+
+    const uniqueDays = new Set(
+        entries.map(e => new Date(e.createdAt).toDateString())
+    );
+
+    document.getElementById("daysCount").textContent =
+        uniqueDays.size;
+
+    if (result.length === 0) {
+
+        list.innerHTML = `
+            <div class="card empty">
+                <div>🌷</div>
+                <h3>No memories found</h3>
+                <p>Your beautiful stories will appear here.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    result.forEach(entry => {
+
+        const article = document.createElement("article");
+        article.className = "entry";
+
+        const top = document.createElement("div");
+        top.className = "entry-top";
+
+        const heading = document.createElement("div");
+
+        const title = document.createElement("h3");
+        title.textContent = entry.title;
+
+        const date = document.createElement("div");
+        date.className = "entry-date";
+        date.textContent = formatDate(entry.createdAt) +
+            (entry.updatedAt ? " · Edited" : "");
+
+        heading.append(title, date);
+
+        const mood = document.createElement("div");
+        mood.className = "mood";
+        mood.textContent = entry.mood;
+
+        top.append(heading, mood);
+
+        const content = document.createElement("div");
+        content.className = "entry-content";
+
+        content.textContent =
+            entry.content.length > 350
+                ? entry.content.slice(0,350) + "..."
+                : entry.content;
+
+        const actions = document.createElement("div");
+        actions.className = "entry-actions";
+
+        const favorite = document.createElement("button");
+        favorite.className = "small-btn";
+        favorite.textContent = entry.favorite
+            ? "❤️ Favourite"
+            : "♡ Favourite";
+
+        favorite.onclick = () => toggleFavorite(entry.id);
+
+        const edit = document.createElement("button");
+        edit.className = "small-btn";
+        edit.textContent = "✏️ Edit";
+        edit.onclick = () => editEntry(entry.id);
+
+        const del = document.createElement("button");
+        del.className = "small-btn delete-btn";
+        del.textContent = "🗑 Delete";
+        del.onclick = () => deleteEntry(entry.id);
+
+        actions.append(favorite, edit, del);
+
+        article.append(top, content, actions);
+
+        list.appendChild(article);
+
+    });
+
+}
+
+/* =========================
+   DARK AND LIGHT MODE
+========================= */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+    const dark = document.body.classList.contains("dark");
+
+    localStorage.setItem("mydiary_theme", dark ? "dark" : "light");
+
+}
+
+if (localStorage.getItem("mydiary_theme") === "dark") {
+    document.body.classList.add("dark");
+}
+
+/* =========================
+   START APPLICATION
+========================= */
+
+if (!window.crypto ||
+    !window.crypto.subtle ||
+    !window.crypto.randomUUID ||
+    !window.localStorage) {
+
+    document.getElementById("lockTitle").textContent =
+        "Browser Not Supported";
+
+    document.getElementById("lockDescription").textContent =
+        "Please use an updated browser that supports secure encryption and local storage.";
+
+    pinForm.classList.add("hidden");
+
+} else {
+
+    showLock();
+
+}
+
+</script>
+
+</body>
+</html>
+<!-- Creator Credit -->
+<div class="creator-credit">
+    Made with ❤️ by <strong>Ridam V. Savji</strong>
+</div>
+
+<style>
+.creator-credit {
+    text-align: center;
+    padding: 18px 10px;
+    margin-top: 25px;
+    font-size: 13px;
+    color: var(--text-secondary, #888);
+    letter-spacing: 0.5px;
+}
+
+.creator-credit strong {
+    color: var(--text, #333);
+    font-weight: 700;
+}
+</style>
